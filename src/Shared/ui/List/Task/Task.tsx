@@ -5,10 +5,11 @@ import { Checkbox, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useAppDispatch } from '../../../../App/hook/useApp';
 import { updateTaskStatus, deleteTask } from '../../../../Entities/sclise/tasksSlice';
-import {Task as TaskProps, TaskStatus} from '../../../../Entities/types/task.type';
+import { Task as TaskProps, TaskStatus } from '../../../../Entities/types/task.type';
+import { parseDateToUIShort } from '../../../../Features';
 
 const Wrapper = styled.div`
-  padding: 1rem;
+  padding: 0.5rem 1rem;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -25,7 +26,6 @@ const Wrapper = styled.div`
 const LinkTask = styled(Link)`
   display: flex;
   color: inherit;
-  text-decoration: none;
 
   &:hover {
     color: var(--hover-color);
@@ -50,23 +50,25 @@ export const Task: FC<TaskProps> = ({id, title, stardDate, endDate, status}) => 
   };
 
   const onDelete = (id: number) => {
-    console.log(id)
     dispatch(deleteTask({id}));
   };
 
   return (
     <Wrapper> 
-      <LinkTask to={'task/'+ id}>
-        <DataInfo>{stardDate}</DataInfo>
-        <DataInfo>{endDate}</DataInfo>
+      <LinkTask 
+        to={'task/'+ id} 
+        style={
+          status === 'progress' ? { textDecoration: 'none'} : {textDecoration: 'line-through'}
+        }
+      >
+        <DataInfo>{parseDateToUIShort(stardDate)}</DataInfo>
+        <DataInfo>{parseDateToUIShort(endDate)}</DataInfo>
         <p>{title}</p>
       </LinkTask>
       <StatusInfo>
-      
         {status === 'failed' 
           ? <Checkbox disabled checked/>
           : <Checkbox 
-          // @ts-ignore
             onChange={() => onChangeCheckbox(id, status)} 
             checked={status === 'complited'} />
         }

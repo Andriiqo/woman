@@ -11,7 +11,7 @@ export const getAllTask = createAsyncThunk<{tasks: Task[], length: number}, void
     if(response.status !== 200) {
       return rejectWithValue(`Error! ${response}`);
     }
-
+    
     return response.data.data;
   }, 
 );
