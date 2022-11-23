@@ -6,7 +6,6 @@
     --size-height: 4rem;
 }
 
-
 *,
 *::before,
 *::after {
@@ -16,4 +15,9 @@
 ::-webkit-scrollbar {
     width: 0;
     height: 0;
+}
+
+p {
+    margin: 0;
+    padding: 0;
 }

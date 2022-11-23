@@ -20,17 +20,28 @@ const initialState: InitialState = {
   loading: false,
   data: [],
   length: 0,
-  error: null,
+  error: undefined,
 };
 
 export const tasksSlice = createSlice({
   name: 'tasks',
   initialState,
-  reducers: {},
+  reducers: {
+    updateTaskStatus(state, action) {
+      state.data = state.data.filter((task) => 
+        task.id === action.payload.id 
+          ? (task.status === 'complited' ? task.status = 'progress' : task.status = 'complited') 
+          : task,
+      );
+    },
+    deleteTask(state, action) {
+      state.data = state.data.filter((task) => task.id !== action.payload.id);
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getAllTask.pending, (state) => {
       state.loading = true;
-      state.error = null;
+      state.error = undefined;
     });
     builder.addCase(getAllTask.fulfilled, (state, action) => {
       state.data = action.payload.tasks;
@@ -38,11 +49,12 @@ export const tasksSlice = createSlice({
       state.loading = false;
     });
     builder.addCase(getAllTask.rejected, (state, action) => {
-      // @ts-ignore
-      state.error = action;
+      state.error = action.payload;
       state.loading = false;
     });
   },
 });
+
+export const { updateTaskStatus, deleteTask } = tasksSlice.actions;
 
 export default tasksSlice.reducer;

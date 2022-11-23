@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { CircularProgress, Typography } from '@mui/material';
-import { useAppSelector } from '../../../../App/hook/useApp';
-import { Task } from '../Task';
+import { useAppSelector } from '../../../App/hook/useApp';
+import { Task } from './Task/Task';
 
 const Wrapper = styled.div`
   padding: 1rem;
@@ -36,7 +36,7 @@ export const List = () => {
 
   return (
     <Wrapper>
-      {data.map(task => 
+      {data.map((task) => 
         <Task 
           key={task.id}
           id={task.id}
