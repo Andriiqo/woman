@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { v4 as uuid } from 'uuid';
-import { convertDateFromDotToBackend } from '../../Features';
+import { convertDateToBackend } from '../../Features';
 import { getTasks } from '../../Shared/api/task/task';
 import { Task } from '../types/task.type';
 import { InitialState } from './types';
@@ -37,8 +37,8 @@ export const tasksSlice = createSlice({
           title: action.payload.title,
           text: action.payload.text,
           status: 'progress',
-          startDate: action.payload.startDate,
-          endDate: action.payload.endDate,
+          startDate: convertDateToBackend(action.payload.startDate),
+          endDate: convertDateToBackend(action.payload.endDate),
           files: [],
         },
       ];
@@ -49,8 +49,8 @@ export const tasksSlice = createSlice({
           return ({
             ...task,
             ...action.payload,
-            startDate: action.payload.startDate,
-            endDate: action.payload.endDate,
+            startDate: convertDateToBackend(action.payload.startDate),
+            endDate: convertDateToBackend(action.payload.endDate),
           });
         }
         return task;

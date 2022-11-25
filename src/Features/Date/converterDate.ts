@@ -1,4 +1,3 @@
-export const convertDateFromDotToBackend = (date: string): string => {
-  const [day, mount, year] = date.split('.');
-  return [year, mount, day].join('-');
-};
+import dayjs from 'dayjs';
+
+export const convertDateToBackend = (date: string): string => dayjs(date).format('YYYY-MM-DD');

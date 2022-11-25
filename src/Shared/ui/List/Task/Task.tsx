@@ -26,11 +26,11 @@ const Wrapper = styled.div`
 
 const LinkTask = styled(Link)<{status: string}>`
   display: flex;
-  color: ${props => props.status === 'failed' ? '#f44336' : 'inherit'};
+  color: ${props => props.status === 'failed' ? 'var(--error-color)' : 'inherit'};
   text-decoration: ${props => props.status === 'progress' ? 'none' : 'line-through'};
 
   &:hover {
-    color:  ${props => props.status === 'failed' ? '#f44336' : 'var(--hover-color)'};
+    color:  ${props => props.status === 'failed' ? 'var(--error-color)' : 'var(--hover-color)'};
   }
 `;
 
@@ -58,8 +58,8 @@ export const Task: FC<TaskProps> = ({id, title, startDate, endDate, status}) => 
     <Wrapper> 
       <LinkTask 
         to={'task/'+ id} status={status}>
-        <DataInfo>{startDate}</DataInfo>
-        <DataInfo>{endDate}</DataInfo>
+        <DataInfo>{parseDateToUIShort(startDate)}</DataInfo>
+        <DataInfo>{parseDateToUIShort(endDate)}</DataInfo>
         <p>{title}</p>
       </LinkTask>
       <StatusInfo>

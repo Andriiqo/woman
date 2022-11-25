@@ -1,4 +1,4 @@
 import { parseDateToUIShort, parseDateToUILong } from './Date/parserDateToUI';
-import { convertDateFromDotToBackend } from './Date/converterDate';
+import { convertDateToBackend } from './Date/converterDate';
 
-export { parseDateToUIShort, parseDateToUILong, convertDateFromDotToBackend };
+export { parseDateToUIShort, parseDateToUILong, convertDateToBackend };

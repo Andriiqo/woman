@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Button, Typography } from '@mui/material';
 import styled from '@emotion/styled';
 import { useAppSelector } from '../../../../App/hook/useApp';
+import { parseDateToUILong } from '../../../../Features';
 import { Modal } from '../..';
 
 const Wrapper = styled.div`
@@ -53,11 +54,11 @@ export const Detailed = () => {
         <DateInfo>
           <TableContentDate>
             <InfoText text="Дата заведения задачи:"/>
-            <InfoText text={task?.startDate ? task.startDate : 'Дата не выбрана'}/>
+            <InfoText text={task?.startDate ? parseDateToUILong(task.startDate) : 'Дата не выбрана'}/>
           </TableContentDate>
           <TableContentDate>
             <InfoText text="Дата окончания задачи:"/>
-            <InfoText text={task?.endDate ? task.endDate : 'Дата не выбрана'}/>
+            <InfoText text={task?.endDate ?  parseDateToUILong(task.endDate) : 'Дата не выбрана'}/>
           </TableContentDate>
         </DateInfo>
         <TableContentDate>

@@ -3,6 +3,7 @@
 :root {
     --main-bg-color: #37373d;
     --hover-color: #90caf9;
+    --error-color: #f44336;
     --size-height: 4rem;
 }
 

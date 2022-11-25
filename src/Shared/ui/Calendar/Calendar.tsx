@@ -1,18 +1,17 @@
 import { FC, useEffect, useState } from 'react';
-import { UseFormRegister, UseFormSetValue, UseFormGetValues } from 'react-hook-form';
+import { UseFormSetValue, UseFormGetValues } from 'react-hook-form';
 import { TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Fields } from '../Form/Form';
 
 interface CalendarProps {
   title: string,
-  register: UseFormRegister<Fields>,
   registerName: 'startDate' | 'endDate',
   getValues: UseFormGetValues<Fields>,
   setValue: UseFormSetValue<Fields>,
 }
 
-export const Calendar: FC<CalendarProps> = ({title, registerName, register, getValues, setValue}) => {
+export const Calendar: FC<CalendarProps> = ({title, registerName, getValues, setValue}) => {
   const [date, setDate] = useState<string>(getValues(registerName));
     
   const chengeDate = (newValue: string) => {
@@ -31,7 +30,7 @@ export const Calendar: FC<CalendarProps> = ({title, registerName, register, getV
         <DatePicker
           value={date}
           onChange={(newValue) => chengeDate(String(newValue))}
-          renderInput={(params) => <TextField {...params} {...register(registerName)} />}
+          renderInput={(params) => <TextField {...params} />}
         />
       </div>
     </>

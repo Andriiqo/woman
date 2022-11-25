@@ -7,8 +7,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Button, TextField } from '@mui/material';
 import { useAppDispatch } from '../../../App/hook/useApp';
 import { createTask, updateTaskAllFields } from '../../../Entities/sclise/tasksSlice';
-import { Calendar } from '..';
 import { Task } from '../../../Entities/types/task.type';
+import { Calendar } from '..';
 
 const Wrapper = styled.form`
   padding: 1rem;
@@ -23,11 +23,13 @@ export type Fields = {
   endDate: string,
 };
 
-export const Form: FC<{
-    toggleModal: Dispatch<SetStateAction<boolean>>, 
-    isNewTask?: boolean,
-    task?: Task;
-}> = ({toggleModal, isNewTask, task}) => {
+interface FormProps {
+  toggleModal: Dispatch<SetStateAction<boolean>>, 
+  isNewTask?: boolean,
+  task?: Task;
+}
+
+export const Form: FC<FormProps> = ({toggleModal, isNewTask, task}) => {
 
   const dispatch = useAppDispatch();
   const { register, getValues, setValue, handleSubmit, formState: { errors } } = useForm<Fields>({
@@ -54,22 +56,21 @@ export const Form: FC<{
         <Calendar 
           title="Дата начала"
           getValues={getValues}
-          setValue={setValue} 
-          register={register}
+          setValue={setValue}
           registerName="startDate" 
         />
         <Calendar
           title="Дата начала"
           getValues={getValues}
-          setValue={setValue}  
-          register={register} 
+          setValue={setValue} 
           registerName="endDate" 
         /> 
       </LocalizationProvider>
       <TextField label="Заголовок" variant="outlined" {...register('title', { required: true })}/>
-      <p style={{color: errors.title ? '#f44336' : 'transparent', margin: '0.25rem 0'}}>Укажите заголовок!</p>
+      <p style={{color: errors.title ? 'var(--error-color)' : 'transparent', margin: '0.25rem 0'}}>
+        Укажите заголовок!
+      </p>
       <TextField style={{marginBottom: '1.75rem'}} label="Описание" variant="outlined" {...register('text')}/>
-     
       <div style={{display: 'flex', justifyContent: 'space-between'}}>
         <Button type="submit" variant="contained" style={{maxWidth: '12rem'}}>
           {isNewTask ? 'Создать' : 'Сохранить'}
