@@ -1,11 +1,11 @@
 export type TaskStatus = 'complited' | 'progress' | 'failed';
 
 export type Task = {
-    id: number;
+    id: string;
     title: string;
     text?: string;
     status: TaskStatus;
-    stardDate: string;
+    startDate: string;
     endDate: string;
     files?: any[]; 
 }

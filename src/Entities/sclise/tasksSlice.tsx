@@ -1,4 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { v4 as uuid } from 'uuid';
+import { convertDateFromDotToBackend } from '../../Features';
 import { getTasks } from '../../Shared/api/task/task';
 import { Task } from '../types/task.type';
 import { InitialState } from './types';
@@ -27,6 +29,33 @@ export const tasksSlice = createSlice({
   name: 'tasks',
   initialState,
   reducers: {
+    createTask(state, action) {
+      state.data = [
+        ...state.data,
+        {
+          id: uuid(),
+          title: action.payload.title,
+          text: action.payload.text,
+          status: 'progress',
+          startDate: action.payload.startDate,
+          endDate: action.payload.endDate,
+          files: [],
+        },
+      ];
+    },
+    updateTaskAllFields(state, action) {
+      state.data = state.data.map((task) => {
+        if (task.id === action.payload.id) {
+          return ({
+            ...task,
+            ...action.payload,
+            startDate: action.payload.startDate,
+            endDate: action.payload.endDate,
+          });
+        }
+        return task;
+      });
+    },
     updateTaskStatus(state, action) {
       state.data = state.data.filter((task) => 
         task.id === action.payload.id 
@@ -55,6 +84,6 @@ export const tasksSlice = createSlice({
   },
 });
 
-export const { updateTaskStatus, deleteTask } = tasksSlice.actions;
+export const { createTask, updateTaskStatus, deleteTask, updateTaskAllFields } = tasksSlice.actions;
 
 export default tasksSlice.reducer;

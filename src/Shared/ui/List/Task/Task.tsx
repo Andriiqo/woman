@@ -8,6 +8,7 @@ import { updateTaskStatus, deleteTask } from '../../../../Entities/sclise/tasksS
 import { Task as TaskProps, TaskStatus } from '../../../../Entities/types/task.type';
 import { parseDateToUIShort } from '../../../../Features';
 
+
 const Wrapper = styled.div`
   padding: 0.5rem 1rem;
   width: 100%;
@@ -23,12 +24,13 @@ const Wrapper = styled.div`
   }
 `;
 
-const LinkTask = styled(Link)`
+const LinkTask = styled(Link)<{status: string}>`
   display: flex;
-  color: inherit;
+  color: ${props => props.status === 'failed' ? '#f44336' : 'inherit'};
+  text-decoration: ${props => props.status === 'progress' ? 'none' : 'line-through'};
 
   &:hover {
-    color: var(--hover-color);
+    color:  ${props => props.status === 'failed' ? '#f44336' : 'var(--hover-color)'};
   }
 `;
 
@@ -41,28 +43,23 @@ const StatusInfo = styled.div`
   display: flex;
 `;
 
-export const Task: FC<TaskProps> = ({id, title, stardDate, endDate, status}) => {
-
+export const Task: FC<TaskProps> = ({id, title, startDate, endDate, status}) => {
   const dispatch = useAppDispatch();
 
-  const onChangeCheckbox = (id: number, status: TaskStatus) => {
+  const onChangeCheckbox = (id: string, status: TaskStatus) => {
     dispatch(updateTaskStatus({id, status}));
   };
 
-  const onDelete = (id: number) => {
+  const onDelete = (id: string) => {
     dispatch(deleteTask({id}));
   };
 
   return (
     <Wrapper> 
       <LinkTask 
-        to={'task/'+ id} 
-        style={
-          status === 'progress' ? { textDecoration: 'none'} : {textDecoration: 'line-through'}
-        }
-      >
-        <DataInfo>{parseDateToUIShort(stardDate)}</DataInfo>
-        <DataInfo>{parseDateToUIShort(endDate)}</DataInfo>
+        to={'task/'+ id} status={status}>
+        <DataInfo>{startDate}</DataInfo>
+        <DataInfo>{endDate}</DataInfo>
         <p>{title}</p>
       </LinkTask>
       <StatusInfo>

@@ -40,7 +40,7 @@ export const List = () => {
         <Task 
           key={task.id}
           id={task.id}
-          stardDate={task.stardDate}
+          startDate={task.startDate}
           endDate={task.endDate}
           status={task.status} 
           title={task.title}

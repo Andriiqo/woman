@@ -16,11 +16,10 @@ const Wrapper = styled.header`
 `;
 
 export const Header = () => {
-
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openModalNew, setOpenModalNew] = useState<boolean>(false);
 
   const toggleModal = () => {
-    setOpenModal(!openModal);
+    setOpenModalNew(!openModalNew);
   };
 
   return (
@@ -29,7 +28,7 @@ export const Header = () => {
         Список дел
       </Typography>
       <Button onClick={toggleModal} variant="contained">Добавить задачу</Button>
-      <Modal isOpen={openModal} toggleModal={toggleModal}/>
+      <Modal isOpen={openModalNew} toggleModal={toggleModal} isNewTask/>
     </Wrapper>
   );
 };

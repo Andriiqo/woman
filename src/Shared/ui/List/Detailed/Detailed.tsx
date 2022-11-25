@@ -1,9 +1,9 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import styled from '@emotion/styled';
 import { useAppSelector } from '../../../../App/hook/useApp';
-import { parseDateToUILong } from '../../../../Features';
+import { Modal } from '../..';
 
 const Wrapper = styled.div`
   padding: 1rem;
@@ -27,6 +27,7 @@ const TableContentDate = styled.div`
   flex-direction: column;
 `;
 
+
 interface InfoTextProps {
   text: string;
   mt?: string;
@@ -42,32 +43,37 @@ const InfoText: FC<InfoTextProps> = ({text, mt}) => {
 
 export const Detailed = () => {
   const {id} = useParams();
-  const task = useAppSelector((state) => state.tasks.data.find((task => task.id === Number(id))));
+  const task = useAppSelector((state) => state.tasks.data.find((task => task.id === id)));
+  const [openModalEdit, setOpenModalNew] = useState<boolean>(false);
 
   return (
-    <Wrapper>
-      <DateInfo>
+    <>
+      <Wrapper>
+        <Button onClick={() => setOpenModalNew(true)} variant="contained">Редактировать</Button>
+        <DateInfo>
+          <TableContentDate>
+            <InfoText text="Дата заведения задачи:"/>
+            <InfoText text={task?.startDate ? task.startDate : 'Дата не выбрана'}/>
+          </TableContentDate>
+          <TableContentDate>
+            <InfoText text="Дата окончания задачи:"/>
+            <InfoText text={task?.endDate ? task.endDate : 'Дата не выбрана'}/>
+          </TableContentDate>
+        </DateInfo>
         <TableContentDate>
-          <InfoText text="Дата заведения задачи:"/>
-          <InfoText text={task?.stardDate ? parseDateToUILong(task.stardDate) : 'Дата не выбрана'}/>
+          <InfoText mt="2rem" text="Название"/>
+          <InfoText text={task?.title || 'Заголовок не указан'}/>
         </TableContentDate>
         <TableContentDate>
-          <InfoText text="Дата окончания задачи:"/>
-          <InfoText text={task?.endDate ? parseDateToUILong(task.endDate) : 'Дата не выбрана'}/>
+          <InfoText mt="2rem" text="Описание"/>
+          <InfoText text={task?.text || 'Описание отсутствует'}/>
         </TableContentDate>
-      </DateInfo>
-      <TableContentDate>
-        <InfoText mt="2rem" text="Название"/>
-        <InfoText text={task?.title || 'Заголовок не указан'}/>
-      </TableContentDate>
-      <TableContentDate>
-        <InfoText mt="2rem" text="Описание"/>
-        <InfoText text={task?.text || 'Описание отсутствует'}/>
-      </TableContentDate>
-      <InfoText mt="3rem" text="Приклепленные файлы:"/>
-      {!!task?.files?.length && task.files.map((file) => (
-        <div key={file}>{file}</div>
-      ))}
-    </Wrapper>
+        <InfoText mt="3rem" text="Приклепленные файлы:"/>
+        {!!task?.files?.length && task.files.map((file) => (
+          <div key={file}>{file}</div>
+        ))}
+      </Wrapper>
+      <Modal isOpen={openModalEdit} toggleModal={setOpenModalNew} task={task}/>
+    </>
   );
 };

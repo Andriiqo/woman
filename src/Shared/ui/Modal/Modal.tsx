@@ -1,6 +1,8 @@
 import { Dispatch, FC, SetStateAction } from 'react';
 import styled from '@emotion/styled';
-import { Typography, Modal as ModalUI } from '@mui/material';
+import { Modal as ModalUI } from '@mui/material';
+import {Form} from '..';
+import { Task } from '../../../Entities/types/task.type';
 
 const ModalContent = styled.div`
     position: absolute;
@@ -8,7 +10,7 @@ const ModalContent = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     width: 80%;
-    min-height: 30vh;
+    min-height: 50vh;
     display: flex;
     flex-direction: column;
     background-color: var(--main-bg-color);
@@ -17,10 +19,11 @@ const ModalContent = styled.div`
 interface ModalProps {
     isOpen: boolean;
     toggleModal: Dispatch<SetStateAction<boolean>>
+    isNewTask?: boolean;
+    task?: Task;
 }   
 
-export const Modal: FC<ModalProps> = ({isOpen, toggleModal}) => {
-
+export const Modal: FC<ModalProps> = ({isOpen, toggleModal, isNewTask, task}) => {
 
   return (
     <ModalUI
@@ -30,12 +33,7 @@ export const Modal: FC<ModalProps> = ({isOpen, toggleModal}) => {
       aria-describedby="modal-modal-description"
     >
       <ModalContent>
-        <Typography id="spring-modal-title" variant="h6" component="h2">
-             ModalContent Text in a modal
-        </Typography>
-        <Typography id="spring-modal-description" sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-        </Typography>
+        <Form toggleModal={toggleModal} isNewTask={isNewTask} task={task}/>
       </ModalContent>
     </ModalUI>
   );
