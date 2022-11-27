@@ -2,7 +2,7 @@ import { Task } from '../types/task.type';
 
 export type InitialState = {
     loading: boolean;
-    data: Task[] | [];
+    data: Record<string, Task>;
     length: number;
-    error: undefined | string;
+    error: undefined | null | string;
 }

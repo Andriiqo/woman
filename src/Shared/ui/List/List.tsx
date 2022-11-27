@@ -24,7 +24,7 @@ export const List = () => {
     );
   }
 
-  if(!data.length) {
+  if(!Object.entries(data).length) {
     return (
       <Wrapper>
         <Typography variant="h5" component="h2">
@@ -36,7 +36,7 @@ export const List = () => {
 
   return (
     <Wrapper>
-      {data.map((task) => 
+      {Object.values(data).map((task) => (
         <Task 
           key={task.id}
           id={task.id}
@@ -44,8 +44,8 @@ export const List = () => {
           endDate={task.endDate}
           status={task.status} 
           title={task.title}
-        />,
-      )}
+        />
+      ))}
     </Wrapper>
   );
 };

@@ -20,9 +20,9 @@ export const getAllTask = createAsyncThunk<{tasks: Task[], length: number}, void
 
 const initialState: InitialState = {
   loading: false,
-  data: [],
+  data: {},
   length: 0,
-  error: undefined,
+  error: null,
 };
 
 export const tasksSlice = createSlice({
@@ -30,56 +30,51 @@ export const tasksSlice = createSlice({
   initialState,
   reducers: {
     createTask(state, action) {
-      state.data = [
-        ...state.data,
-        {
-          id: uuid(),
-          title: action.payload.title,
-          text: action.payload.text,
-          status: 'progress',
-          startDate: convertDateToBackend(action.payload.startDate),
-          endDate: convertDateToBackend(action.payload.endDate),
-          files: [],
-        },
-      ];
+      const taskId = uuid();
+
+      state.data[taskId] = {
+        id: taskId,
+        title: action.payload.title,
+        text: action.payload.text,
+        status: 'progress',
+        startDate: convertDateToBackend(action.payload.startDate),
+        endDate: convertDateToBackend(action.payload.endDate),
+        files: [],
+      };
     },
     updateTaskAllFields(state, action) {
-      state.data = state.data.map((task) => {
-        if (task.id === action.payload.id) {
-          return ({
-            ...task,
-            ...action.payload,
-            startDate: convertDateToBackend(action.payload.startDate),
-            endDate: convertDateToBackend(action.payload.endDate),
-          });
-        }
-        return task;
-      });
+      state.data[action.payload.id] = {
+        ...action.payload,
+        status: 'progress',
+        startDate: convertDateToBackend(action.payload.startDate),
+        endDate: convertDateToBackend(action.payload.endDate),
+      };
+   
     },
     updateTaskStatus(state, action) {
-      state.data = state.data.filter((task) => 
-        task.id === action.payload.id 
-          ? (task.status === 'complited' ? task.status = 'progress' : task.status = 'complited') 
-          : task,
-      );
+      state.data[action.payload.id].status === 'complited' 
+        ? state.data[action.payload.id].status = 'progress' 
+        : state.data[action.payload.id].status = 'complited';
     },
     deleteTask(state, action) {
-      state.data = state.data.filter((task) => task.id !== action.payload.id);
+      delete state.data[action.payload.id];
     },
   },
   extraReducers: (builder) => {
     builder.addCase(getAllTask.pending, (state) => {
       state.loading = true;
-      state.error = undefined;
+      state.error = null;
     });
     builder.addCase(getAllTask.fulfilled, (state, action) => {
-      state.data = action.payload.tasks;
+      // мепим хеш-таблицу стора для дальнейшего константого доступа из редакса
+      action.payload.tasks.map((task) => state.data = {...state.data, [task.id]: task});
       state.length = action.payload.length;
       state.loading = false;
+      state.error = null;
     });
     builder.addCase(getAllTask.rejected, (state, action) => {
-      state.error = action.payload;
       state.loading = false;
+      state.error = action.payload;
     });
   },
 });

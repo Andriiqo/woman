@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import styled from '@emotion/styled';
 import { Button, Typography } from '@mui/material';
 import { Modal } from '../../Shared/ui';
+import { useParams } from 'react-router-dom';
 
 
 const Wrapper = styled.header`
@@ -17,9 +18,13 @@ const Wrapper = styled.header`
 
 export const Header = () => {
   const [openModalNew, setOpenModalNew] = useState<boolean>(false);
+  const [openModalEdit, setOpenModalEdit] = useState<boolean>(false);
+  const {id} = useParams();
 
-  const toggleModal = () => {
-    setOpenModalNew(!openModalNew);
+  const isNewTask = !id;
+
+  const toggleModal = (openModal: boolean, setOpenModal: Dispatch<SetStateAction<boolean>>) => {
+    setOpenModal(!openModal);
   };
 
   return (
@@ -27,8 +32,20 @@ export const Header = () => {
       <Typography variant="h4" component="h1">
         Список дел
       </Typography>
-      <Button onClick={toggleModal} variant="contained">Добавить задачу</Button>
-      <Modal isOpen={openModalNew} toggleModal={toggleModal} isNewTask/>
+      {isNewTask 
+        ? <Button 
+          onClick={() => toggleModal(openModalNew, setOpenModalNew)} 
+          variant="contained">
+            Добавить задачу
+        </Button>
+        : <Button 
+          onClick={() => toggleModal(openModalNew, setOpenModalNew)} 
+          variant="contained">
+          Редактировать
+        </Button>
+      }
+      <Modal isOpen={openModalNew} toggleModal={setOpenModalNew} isNewTask={isNewTask}/>
+      <Modal isOpen={openModalEdit} toggleModal={setOpenModalEdit} isNewTask={isNewTask}/>
     </Wrapper>
   );
 };

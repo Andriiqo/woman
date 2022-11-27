@@ -5,9 +5,8 @@ import { Checkbox, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useAppDispatch } from '../../../../App/hook/useApp';
 import { updateTaskStatus, deleteTask } from '../../../../Entities/sclise/tasksSlice';
-import { Task as TaskProps, TaskStatus } from '../../../../Entities/types/task.type';
+import { Task as TaskProps } from '../../../../Entities/types/task.type';
 import { parseDateToUIShort } from '../../../../Features';
-
 
 const Wrapper = styled.div`
   padding: 0.5rem 1rem;
@@ -46,8 +45,8 @@ const StatusInfo = styled.div`
 export const Task: FC<TaskProps> = ({id, title, startDate, endDate, status}) => {
   const dispatch = useAppDispatch();
 
-  const onChangeCheckbox = (id: string, status: TaskStatus) => {
-    dispatch(updateTaskStatus({id, status}));
+  const onChangeCheckbox = (id: string) => {
+    dispatch(updateTaskStatus({id}));
   };
 
   const onDelete = (id: string) => {
@@ -66,7 +65,7 @@ export const Task: FC<TaskProps> = ({id, title, startDate, endDate, status}) => 
         {status === 'failed' 
           ? <Checkbox disabled checked/>
           : <Checkbox 
-            onChange={() => onChangeCheckbox(id, status)} 
+            onChange={() => onChangeCheckbox(id)} 
             checked={status === 'complited'} />
         }
         <IconButton onClick={() => onDelete(id)} color="error">

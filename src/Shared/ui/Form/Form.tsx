@@ -1,13 +1,13 @@
 import { Dispatch, FC, SetStateAction } from 'react';
+import { useParams } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
 import { locale } from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Button, TextField } from '@mui/material';
-import { useAppDispatch } from '../../../App/hook/useApp';
+import { useAppDispatch, useAppSelector } from '../../../App/hook/useApp';
 import { createTask, updateTaskAllFields } from '../../../Entities/sclise/tasksSlice';
-import { Task } from '../../../Entities/types/task.type';
 import { Calendar } from '..';
 
 const Wrapper = styled.form`
@@ -25,11 +25,12 @@ export type Fields = {
 
 interface FormProps {
   toggleModal: Dispatch<SetStateAction<boolean>>, 
-  isNewTask?: boolean,
-  task?: Task;
+  isNewTask: boolean | undefined,
 }
 
-export const Form: FC<FormProps> = ({toggleModal, isNewTask, task}) => {
+export const Form: FC<FormProps> = ({toggleModal, isNewTask}) => {
+  const {id} = useParams();
+  const task = useAppSelector((state) => state.tasks.data[String(id)]);
 
   const dispatch = useAppDispatch();
   const { register, getValues, setValue, handleSubmit, formState: { errors } } = useForm<Fields>({
@@ -60,7 +61,7 @@ export const Form: FC<FormProps> = ({toggleModal, isNewTask, task}) => {
           registerName="startDate" 
         />
         <Calendar
-          title="Дата начала"
+          title="Дата завершения"
           getValues={getValues}
           setValue={setValue} 
           registerName="endDate" 

@@ -2,7 +2,6 @@ import { Dispatch, FC, SetStateAction } from 'react';
 import styled from '@emotion/styled';
 import { Modal as ModalUI } from '@mui/material';
 import {Form} from '..';
-import { Task } from '../../../Entities/types/task.type';
 
 const ModalContent = styled.div`
     position: absolute;
@@ -20,10 +19,9 @@ interface ModalProps {
     isOpen: boolean;
     toggleModal: Dispatch<SetStateAction<boolean>>
     isNewTask?: boolean;
-    task?: Task;
 }   
 
-export const Modal: FC<ModalProps> = ({isOpen, toggleModal, isNewTask, task}) => {
+export const Modal: FC<ModalProps> = ({isOpen, toggleModal, isNewTask}) => {
 
   return (
     <ModalUI
@@ -33,7 +31,7 @@ export const Modal: FC<ModalProps> = ({isOpen, toggleModal, isNewTask, task}) =>
       aria-describedby="modal-modal-description"
     >
       <ModalContent>
-        <Form toggleModal={toggleModal} isNewTask={isNewTask} task={task}/>
+        <Form toggleModal={toggleModal} isNewTask={isNewTask} />
       </ModalContent>
     </ModalUI>
   );

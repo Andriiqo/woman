@@ -15,8 +15,8 @@ export const Calendar: FC<CalendarProps> = ({title, registerName, getValues, set
   const [date, setDate] = useState<string>(getValues(registerName));
     
   const chengeDate = (newValue: string) => {
-    setDate(String(newValue));
-    setValue(registerName, date as string, { shouldValidate: true, shouldDirty: true});
+    setDate(newValue);
+    setValue(registerName, date, { shouldValidate: true, shouldDirty: true});
   };
 
   useEffect(() => {
