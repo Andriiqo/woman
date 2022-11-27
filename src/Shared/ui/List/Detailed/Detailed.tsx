@@ -1,9 +1,8 @@
-import { FC } from 'react';
 import { useParams } from 'react-router-dom';
-import { Typography } from '@mui/material';
 import styled from '@emotion/styled';
 import { useAppSelector } from '../../../../App/hook/useApp';
 import { parseDateToUILong } from '../../../../Features';
+import { InfoText, ListImages } from '../..';
 
 const Wrapper = styled.div`
   padding: 1rem;
@@ -26,20 +25,6 @@ const TableContentDate = styled.div`
   display: flex;
   flex-direction: column;
 `;
-
-
-interface InfoTextProps {
-  text: string;
-  mt?: string;
-};
-
-const InfoText: FC<InfoTextProps> = ({text, mt}) => {
-  return (
-    <Typography mt={mt} variant="h5" component="h4">
-      {text}
-    </Typography>
-  );
-};
 
 export const Detailed = () => {
   const {id} = useParams();
@@ -65,10 +50,7 @@ export const Detailed = () => {
         <InfoText mt="2rem" text="Описание"/>
         <InfoText text={task?.text || 'Описание отсутствует'}/>
       </TableContentDate>
-      <InfoText mt="3rem" text="Приклепленные файлы:"/>
-      {!!task?.files?.length && task.files.map((file: any) => (
-        <div key={file}>{file}</div>
-      ))}
+      <ListImages taskId={id || ''} list={task?.files || []}/>
     </Wrapper>
   );
 };

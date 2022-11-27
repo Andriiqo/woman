@@ -13,7 +13,7 @@ export const getAllTask = createAsyncThunk<{tasks: Task[], length: number}, void
     if(response.status !== 200) {
       return rejectWithValue(`Error! ${response}`);
     }
-    
+
     return response.data.data;
   }, 
 );
@@ -39,7 +39,7 @@ export const tasksSlice = createSlice({
         status: 'progress',
         startDate: convertDateToBackend(action.payload.startDate),
         endDate: convertDateToBackend(action.payload.endDate),
-        files: [],
+        files: action.payload.files.map((file: Blob | MediaSource) => URL.createObjectURL(file)),
       };
     },
     updateTaskAllFields(state, action) {
@@ -48,8 +48,8 @@ export const tasksSlice = createSlice({
         status: 'progress',
         startDate: convertDateToBackend(action.payload.startDate),
         endDate: convertDateToBackend(action.payload.endDate),
+        files: action.payload.files.map((file: Blob | MediaSource) => URL.createObjectURL(file)),
       };
-   
     },
     updateTaskStatus(state, action) {
       state.data[action.payload.id].status === 'complited' 
@@ -59,6 +59,9 @@ export const tasksSlice = createSlice({
     deleteTask(state, action) {
       delete state.data[action.payload.id];
     },
+    deleteImage(state, action) {
+      state.data[action.payload.id].files?.filter(file => file !== action.payload.file);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getAllTask.pending, (state) => {
@@ -66,7 +69,7 @@ export const tasksSlice = createSlice({
       state.error = null;
     });
     builder.addCase(getAllTask.fulfilled, (state, action) => {
-      // мепим хеш-таблицу стора для дальнейшего константого доступа из редакса
+      // мэпим хеш-таблицу стора для дальнейшего константого доступа из редакса
       action.payload.tasks.map((task) => state.data = {...state.data, [task.id]: task});
       state.length = action.payload.length;
       state.loading = false;
@@ -79,6 +82,6 @@ export const tasksSlice = createSlice({
   },
 });
 
-export const { createTask, updateTaskStatus, deleteTask, updateTaskAllFields } = tasksSlice.actions;
+export const { createTask, updateTaskStatus, deleteTask, updateTaskAllFields, deleteImage } = tasksSlice.actions;
 
 export default tasksSlice.reducer;

@@ -9,7 +9,6 @@ const ModalContent = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     width: 80%;
-    min-height: 50vh;
     display: flex;
     flex-direction: column;
     background-color: var(--main-bg-color);

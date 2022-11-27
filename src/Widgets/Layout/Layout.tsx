@@ -19,7 +19,6 @@ const MainContent = styled.main`
 `;
 
 export const Layout = () => {
-
   const dispatch = useAppDispatch();
 
   useEffect(() => {

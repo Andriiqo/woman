@@ -45,7 +45,7 @@ export const Header = () => {
         </Button>
       }
       <Modal isOpen={openModalNew} toggleModal={setOpenModalNew} isNewTask={isNewTask}/>
-      <Modal isOpen={openModalEdit} toggleModal={setOpenModalEdit} isNewTask={isNewTask}/>
+      <Modal isOpen={openModalEdit} toggleModal={setOpenModalEdit} />
     </Wrapper>
   );
 };

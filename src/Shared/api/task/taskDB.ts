@@ -8,7 +8,7 @@ export const tasks: Task[] = [
     status: 'complited',
     startDate: '2022-12-20',
     endDate: '2022-12-20',
-    files: [2, 3],
+    files: [],
   },
   {
     id: '2',

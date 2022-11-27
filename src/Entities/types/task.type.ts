@@ -7,5 +7,5 @@ export type Task = {
     status: TaskStatus;
     startDate: string;
     endDate: string;
-    files?: any[]; 
+    files?: Blob[] | []; 
 }
