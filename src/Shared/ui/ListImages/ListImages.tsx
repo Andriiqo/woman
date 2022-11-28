@@ -1,10 +1,11 @@
-import { FC } from 'react';
+import { Dispatch, FC } from 'react';
 import styled from '@emotion/styled';
-import { IconButton } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useAppDispatch } from '../../../App/hook/useApp';
 import { InfoText } from '..';
 import { deleteImage } from '../../../Entities/sclise/tasksSlice';
+import { Files } from '../../../Entities/types/task.type';
 
 const ImageContainer = styled.div`
   width: 100%;
@@ -24,31 +25,42 @@ const Image = styled.img`
 `;
 
 interface ListImagesProps {
-  list: Blob[] | String[] | [],
-  taskId: string,
-  // file: string,
+  list: Files,
+  deleteAction?: () => {};
 }
 
-export const ListImages: FC<ListImagesProps> = ({list, taskId}) => {
+export const ListImages: FC<ListImagesProps> = ({list, deleteAction}) => {
 
-  const dispatch = useAppDispatch();
+  if(!Object.entries(list).length) {
+    return (
+      <>
+        <InfoText mt="3rem" text="Приклепленные файлы:" />
+        <Typography variant="h5" component="h2">
+        Прикрепленных файлов нет
+        </Typography>
+      </>
+    );
+  };
 
   return (
     <>
-      <InfoText mt="3rem" text="Приклепленные файлы:" />
+      <InfoText mt="3rem" text="Прикрепленные файлы:" />
       <ImageContainer>
-        {!!list.length && list.map((file) => (
-          <ImageWrapper key={String(file)}>
-            <IconButton 
-              onClick={() => dispatch(deleteImage({taskId, file}))} 
-              color="error"
-              style={{position: 'absolute', top: '0.2rem', right: '0.2rem'}}
-            >
-              <DeleteIcon/>
-            </IconButton>
-            <Image src={String(file)} alt={String(file)} />
-          </ImageWrapper>
-        ))}
+        {
+          Object.values(list).map(file => (
+            <ImageWrapper key={file.id}>
+              <IconButton 
+                // onClick={() => deleteAction()} 
+                color="error"
+                style={{position: 'absolute', top: '0.2rem', right: '0.2rem'}}
+              >
+                <DeleteIcon/>
+              </IconButton>
+              <Image src={file.file} alt={file.file} />
+            </ImageWrapper> 
+          ))
+        }
+      
       </ImageContainer></>
   );
 };

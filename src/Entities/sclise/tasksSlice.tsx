@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { v4 as uuid } from 'uuid';
-import { convertDateToBackend } from '../../Features';
+import { convertDateToBackend, mappingArrayToHash } from '../../Features';
 import { getTasks } from '../../Shared/api/task/task';
-import { Task } from '../types/task.type';
+import { Files, Task } from '../types/task.type';
 import { InitialState } from './types';
 
 export const getAllTask = createAsyncThunk<{tasks: Task[], length: number}, void, {rejectValue: string}>(
@@ -31,7 +31,7 @@ export const tasksSlice = createSlice({
   reducers: {
     createTask(state, action) {
       const taskId = uuid();
-
+  
       state.data[taskId] = {
         id: taskId,
         title: action.payload.title,
@@ -39,7 +39,7 @@ export const tasksSlice = createSlice({
         status: 'progress',
         startDate: convertDateToBackend(action.payload.startDate),
         endDate: convertDateToBackend(action.payload.endDate),
-        files: action.payload.files.map((file: Blob | MediaSource) => URL.createObjectURL(file)),
+        files: mappingArrayToHash(action.payload.files),
       };
     },
     updateTaskAllFields(state, action) {
@@ -48,7 +48,7 @@ export const tasksSlice = createSlice({
         status: 'progress',
         startDate: convertDateToBackend(action.payload.startDate),
         endDate: convertDateToBackend(action.payload.endDate),
-        files: action.payload.files.map((file: Blob | MediaSource) => URL.createObjectURL(file)),
+        files: mappingArrayToHash(action.payload.files),
       };
     },
     updateTaskStatus(state, action) {
@@ -60,7 +60,7 @@ export const tasksSlice = createSlice({
       delete state.data[action.payload.id];
     },
     deleteImage(state, action) {
-      state.data[action.payload.id].files?.filter(file => file !== action.payload.file);
+      state.data[action.payload.taskId].files[action?.payload?.FileId] = action.payload.file;
     },
   },
   extraReducers: (builder) => {

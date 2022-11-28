@@ -39,11 +39,7 @@ export const List = () => {
       {Object.values(data).map((task) => (
         <Task 
           key={task.id}
-          id={task.id}
-          startDate={task.startDate}
-          endDate={task.endDate}
-          status={task.status} 
-          title={task.title}
+          {...task}
         />
       ))}
     </Wrapper>

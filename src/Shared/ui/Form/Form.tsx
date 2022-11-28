@@ -8,7 +8,9 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Button, TextField } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../App/hook/useApp';
 import { createTask, updateTaskAllFields } from '../../../Entities/sclise/tasksSlice';
+import { Files } from '../../../Entities/types/task.type';
 import { Calendar, ListImages } from '..';
+import { mappingArrayToHash } from '../../../Features';
 
 const Wrapper = styled.form`
   padding: 1rem;
@@ -30,7 +32,7 @@ interface FormProps {
 }
 
 export const Form: FC<FormProps> = ({toggleModal, isNewTask}) => {
-  const [filesImaga, setFilesImage] = useState<Blob[] | String[] | []>([]);
+  const [filesImage, setFilesImage] = useState<Files>({});
   const {id} = useParams();
   const task = useAppSelector((state) => state.tasks.data[String(id)]);
   const dispatch = useAppDispatch();
@@ -41,25 +43,22 @@ export const Form: FC<FormProps> = ({toggleModal, isNewTask}) => {
       text: task?.text,
       startDate: task?.startDate,
       endDate: task?.endDate,
-      files: task.files,
+      files: filesImage,
     } : {},
   });
 
 
   // отслеживаем выбор изображений в форме
   useEffect(() => {
-    const subscription = watch((value) => 
-      setFilesImage(
-        [...value.files].map((file: Blob | MediaSource) => URL.createObjectURL(file)),
-      ));
+    const subscription = watch((value) => setFilesImage(mappingArrayToHash(value.files)));
     return () => subscription.unsubscribe();
   }, [watch]);
 
   const onSubmit: SubmitHandler<Fields> = (data) => {
     if (isNewTask) {
-      dispatch(createTask({...data, files: [...data.files]}));
+      dispatch(createTask(data));
     } else {
-      dispatch(updateTaskAllFields({id: task?.id, ...data, files: [...data.files]}));
+      dispatch(updateTaskAllFields({id: task?.id, ...data}));
     }
     toggleModal(false);
   };
@@ -100,7 +99,7 @@ export const Form: FC<FormProps> = ({toggleModal, isNewTask}) => {
           Отмена
         </Button>
       </div>
-      <ListImages taskId={task.id} list={filesImaga}/>
+      <ListImages list={filesImage}/>
     </Wrapper>
   );
 };
