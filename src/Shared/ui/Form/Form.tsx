@@ -14,6 +14,7 @@ import { mappingArrayToHash } from '../../../Features';
 
 const Wrapper = styled.form`
   padding: 1rem;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
 `;
@@ -46,13 +47,8 @@ export const Form: FC<FormProps> = ({toggleModal, isNewTask}) => {
       files: filesImage,
     } : {},
   });
-
-
-  // отслеживаем выбор изображений в форме
-  useEffect(() => {
-    const subscription = watch((value) => setFilesImage(mappingArrayToHash(value.files)));
-    return () => subscription.unsubscribe();
-  }, [watch]);
+ 
+  function deleteImageFromForm() {};
 
   const onSubmit: SubmitHandler<Fields> = (data) => {
     if (isNewTask) {
@@ -62,6 +58,12 @@ export const Form: FC<FormProps> = ({toggleModal, isNewTask}) => {
     }
     toggleModal(false);
   };
+
+  // отслеживаем выбор изображений в форме
+  useEffect(() => {
+    const subscription = watch(({files}) => setFilesImage(mappingArrayToHash(files)));
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   return (
     <Wrapper onSubmit={handleSubmit(onSubmit)}>
@@ -99,7 +101,7 @@ export const Form: FC<FormProps> = ({toggleModal, isNewTask}) => {
           Отмена
         </Button>
       </div>
-      <ListImages list={filesImage}/>
+      <ListImages list={filesImage} formFieldDelete={() => deleteImageFromForm()}/>
     </Wrapper>
   );
 };

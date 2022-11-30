@@ -1,9 +1,8 @@
 import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { useAppDispatch, useAppSelector } from '../../../../App/hook/useApp';
+import { useAppSelector } from '../../../../App/hook/useApp';
 import { parseDateToUILong } from '../../../../Features';
 import { InfoText, ListImages } from '../..';
-import { deleteImage } from '../../../../Entities/sclise/tasksSlice';
 
 const Wrapper = styled.div`
   padding: 1rem;
@@ -30,7 +29,6 @@ const TableContentDate = styled.div`
 export const Detailed = () => {
   const {id} = useParams();
   const task = useAppSelector((state) => state.tasks.data[String(id)]);
-  const dispatch = useAppDispatch();
 
   return (
     <Wrapper>
@@ -52,9 +50,7 @@ export const Detailed = () => {
         <InfoText mt="2rem" text="Описание"/>
         <InfoText text={task?.text || 'Описание отсутствует'}/>
       </TableContentDate>
-      <ListImages 
-        list={task?.files} 
-      />
+      <ListImages list={task?.files} taskId={id}/>
     </Wrapper>
   );
 };

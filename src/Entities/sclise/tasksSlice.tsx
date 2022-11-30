@@ -48,7 +48,10 @@ export const tasksSlice = createSlice({
         status: 'progress',
         startDate: convertDateToBackend(action.payload.startDate),
         endDate: convertDateToBackend(action.payload.endDate),
-        files: mappingArrayToHash(action.payload.files),
+        files: {
+          ...state.data[action.payload.id].files, 
+          ...mappingArrayToHash(action.payload.files),
+        },
       };
     },
     updateTaskStatus(state, action) {
@@ -60,7 +63,7 @@ export const tasksSlice = createSlice({
       delete state.data[action.payload.id];
     },
     deleteImage(state, action) {
-      state.data[action.payload.taskId].files[action?.payload?.FileId] = action.payload.file;
+      delete state.data[action.payload.taskId].files[action.payload.fileId];
     },
   },
   extraReducers: (builder) => {

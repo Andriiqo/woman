@@ -1,7 +1,9 @@
 import { v4 as uuid } from 'uuid';
 import { Files } from '../../Entities/types/task.type';
 
-export const mappingArrayToHash = (array: []): Files => {
+export const mappingArrayToHash = (array: []): Files | {} => {
+  if (!array.length) return {};
+  
   const files: Files = {};
 
   for (const file of array) {

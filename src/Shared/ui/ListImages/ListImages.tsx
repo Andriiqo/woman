@@ -17,19 +17,31 @@ const ImageContainer = styled.div`
 const ImageWrapper = styled.div`
   position: relative;
   width: 200px;
+  height: 120px;
 `;
 
 const Image = styled.img`
-  max-width: 100%;
-  height: auto;
+  width: 100%;
+  max-height: 100%;
 `;
 
 interface ListImagesProps {
   list: Files,
-  deleteAction?: () => {};
+  taskId?: string,
+  formFieldDelete?: (T?: any) => void,
 }
 
-export const ListImages: FC<ListImagesProps> = ({list, deleteAction}) => {
+export const ListImages: FC<ListImagesProps> = ({list = {}, taskId = '', formFieldDelete}) => {
+  const dispatch = useAppDispatch();
+
+  const onDelete = (fileId: string, taskId: string) => {
+    // если нету taskId и передана функция "formFieldDelete" значит мы находимся в модальном окне
+    if (!taskId && formFieldDelete) {
+      formFieldDelete();
+      return;
+    }
+    dispatch(deleteImage({taskId, fileId}));
+  };
 
   if(!Object.entries(list).length) {
     return (
@@ -50,7 +62,7 @@ export const ListImages: FC<ListImagesProps> = ({list, deleteAction}) => {
           Object.values(list).map(file => (
             <ImageWrapper key={file.id}>
               <IconButton 
-                // onClick={() => deleteAction()} 
+                onClick={() => onDelete(file.id, taskId)} 
                 color="error"
                 style={{position: 'absolute', top: '0.2rem', right: '0.2rem'}}
               >
